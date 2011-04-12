@@ -1,0 +1,20 @@
+---
+title: Automaker gem
+layout: post
+---
+
+After figuring out how in the hell you publish a gem, I have made (cut) my
+first one! In a previous post I talk about using the excellent fsevents gem to
+monitor directory changes. I have now polished it up and bundled it as a gem
+and published it to gemcutter. You can now: 
+
+<pre>
+$ sudo gem install fsevents automaker
+$ automaker /path/to/watch .tex
+</pre>
+
+The first parameter to automaker is the directory to watch. 'make' is run in
+this directory. All other parameters are interpreted as patterns to match the
+names of changed files against. If any of the filters matches any filename of
+any of the changed files, 'make' is called. Watch out for my next post
+about how to create a gem using jeweler!
