@@ -8,7 +8,7 @@ first one! In a previous post I talk about using the excellent fsevents gem to
 monitor directory changes. I have now polished it up and bundled it as a gem
 and published it to gemcutter. You can now: 
 
-<pre>
+<pre class="brush: bash;">
 $ sudo gem install fsevents automaker
 $ automaker /path/to/watch .tex
 </pre>

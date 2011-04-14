@@ -118,7 +118,7 @@ a filesystem on the newly attached 'sdf' virtual harddisk.
 <pre class="brush: bash;">
 ec2-attach-volume --region $REGION $BACKUP_VOLUME -i $INSTANCE_ID -d sdf
 sleep 60 # give it a while to start the ssh server
-ssh -i $EC2_SSH_KEY root@$PUBLIC_IP "mkdir /backup && mount /dev/sdf1 /backup"
+ssh -i $EC2_SSH_KEY root@$PUBLIC_IP "mkdir /backup &amp;&amp; mount /dev/sdf1 /backup"
 </pre>
 
 Step 4: run rsync
@@ -128,7 +128,7 @@ With the backup volume mounted, we now proceed to run rsync. The only
 non-standard option here is --rsh, because we have to tell it to use the
 private key that we created earlier to authenticate to the instance.
 
-<em>Be careful with the --delete option!</em>
+*Be careful with the --delete option!*
 
 <pre class="brush: bash;">
 rsync -avhz --progress --delete --force --bwlimit=50 --rsh "ssh -i $EC2_SSH_KEY" /path/you/want/to/backup root@$PUBLIC_IP:/backup/some_nice_name
@@ -138,7 +138,7 @@ Step 5: unmount and detach backup volume
 ----------------------------------------
 
 <pre class="brush: bash;">
-ssh -i $EC2_SSH_KEY root@$PUBLIC_IP "sync && df -h /dev/sdf1 && umount /backup"
+ssh -i $EC2_SSH_KEY root@$PUBLIC_IP "sync &amp;&amp; df -h /dev/sdf1 &amp;&amp; umount /backup"
 sleep 5 # probably not necessary, just to be sure
 ec2-detach-volume --region $REGION $BACKUP_VOLUME
 </pre>
@@ -167,7 +167,7 @@ make sure it stays nice and clean.
 Step 8: troubleshooting
 -----------------------
 
-<em>Help!  I'm getting host key errors from SSH!</em> SSH wants you to confirm
+*Help! I'm getting host key errors from SSH!* SSH wants you to confirm
 on connect that the key fingerprint of the server matches your expectations.
 You can (should) read the fingerprint from the console log of the instance
 (using ec2-get-console-output) but I haven't tried to make the script check the
