@@ -1,0 +1,6 @@
+---
+title: 
+layout: post
+---
+
+'2010-07-23 07:52:55','First, install the gemcutter and jeweler gems:\r\n<pre>$ sudo gem install gemcutter jeweler</pre>\r\nNow signup at <a href=\"http://gemcutter.org/signup\">gemcutter.org</a>\r\n\r\nNext, create a jeweler project:\r\n<pre>$ jeweler mygem\r\n    create  .gitignore\r\n    create  Rakefile\r\n    create  LICENSE\r\n    create  README.rdoc\r\n    create  .document\r\n    create  lib\r\n    create  lib/mygem.rb\r\n    create  test\r\n    create  test/helper.rb\r\n    create  test/test_mygem.rb</pre>\r\nThis will generate a Rakefile and test and lib directories. The Rakefile includes gemcutter support. Run <code>rake -T</code> to see all rake tasks.\r\n\r\nCustomize the generated Rakefile and add your tests and implementation. When you are ready to push to gemcutter, set a version and push:\r\n<pre>$ rake version:bump:minor\r\n$ rake gemcutter:release</pre>\r\nI think the release step will prompt you for your gemcutter credentials.\r\n\r\nThat\'s it!','Gemcutter + Jeweler gem publishing mini-howto','','publish','open','open','','gemcutter-jeweler-gem-publishing-mini-howto','','','2010-07-23 07:52:55','2010-07-23 07:52:55','',0,'http://blog.ronaldevers.nl/?p=15',0,'post','',0);

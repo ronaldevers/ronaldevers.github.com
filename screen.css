@@ -1,0 +1,32 @@
+body, nav li { font-family: Verdana, sans-serif; }
+body { width: 800px; margin-left: auto; margin-right: auto; margin-top: 50px; font-size: .88em; }
+p, li { font-family: Bookman, sans-serif; text-align: justify; }
+
+#top h1 { text-align: center; font-size: 3em; font-weight: bolder; letter-spacing: -0.05em; }
+#top a, #top a:hover, #top a:active, #top a:focus { text-decoration: none; color: #67bf3b; background: white; }
+
+nav ul { margin: 2em 0 0; list-style: none; text-align: center; font-size: 200%; font-weight: bold; }
+nav li { margin: 0 0.5em; vertical-align: middle; display: inline; line-height: 2em; }
+nav a { text-decoration: none; padding: 5px 8px; }
+
+hr { margin: 20px 0; border: none; height: 5px; color: #67bf3b; background: #67bf3b; }
+a { color: black; }
+
+#posts li a, article section a { padding: 2px 4px; }
+#posts a:hover, #posts a:active, #posts a:focus, article section a:hover, article section a:active, article section a:focus { text-decoration: none; background: #67bf3b; }
+
+a.blue:hover,   a.blue:active,   a.blue:focus   { background: #08f; color: #fff }
+a.purple:hover, a.purple:active, a.purple:focus { background: #84b; color: #fff }
+a.red:hover,    a.red:active,    a.red:focus    { background: #f44; color: #fff }
+a.pink:hover,   a.pink:active,   a.pink:focus   { background: #f48; color: #fff }
+a.orange:hover, a.orange:active, a.orange:focus { background: #f90; color: #fff }
+a.green:hover,  a.green:active,  a.green:focus  { background: #67bf3b; color: #fff }
+
+.date { color: gray; font-family: "Courier New"; }
+#posts ul { list-style: none; }
+#posts li { margin: 5px; }
+
+article header h1 { font-size: 150%; font-weight: bold; }
+article { margin: 0 10px; }
+
+.syntaxhighlighter { padding: 5px; }
