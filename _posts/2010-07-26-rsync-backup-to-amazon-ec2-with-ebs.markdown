@@ -30,64 +30,62 @@ The steps needed in the script are the following:
 
 <!--more-->
 
-Step 1: setup
--------------
+## Step 1: setup
 
 First we set some environment variables to make our life easier later on.
 You'll also have to get the ec2 command line tools. They are a simple download
 and unzip, no further installation is required. After you have them installed,
-include their bin dir in your <code>PATH</code> and tell them where they live
-with the <code>EC2_HOME</code> environment variable.
+include their bin dir in your `PATH` and tell them where they live
+with the `EC2_HOME` environment variable.
 
-<pre class="brush: bash;">
-export PATH=~/bin/ec2-api-tools/bin:$PATH
-export EC2_HOME=~/bin/ec2-api-tools
-</pre>
+{% highlight bash %}
+export PATH="~/bin/ec2-api-tools/bin:$PATH"
+export EC2_HOME="~/bin/ec2-api-tools"
+{% endhighlight %}
 
 Now install Java if you haven't already. You'll want to grab the official Sun
 Java and not the OpenJDK version because using that resulted in some ugly
-<code>ClassNotFoundException</code>s.  Tell ec2 where java lives:
+`ClassNotFoundException`s. Tell ec2 where java lives:
 
-<pre class="brush: bash;">
+{% highlight bash %}
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
-</pre>
+{% endhighlight %}
 
-You'll need your ec2 private key and certificate that you can generate from
-your account page at AWS. Put them in your homedir and <code>chmod 400</code>
-them. You'll also need to generate a keypair for logging into your instance
-with SSH. The easiest way to generate the keypair is with the AWS management
-console. It will give you the private key for download and install the public
-key on your instances that use this keypair (we'll get to that later). In the
-example below <code>ssh.pem</code> is the private part of the keypair generated
-with the management console.
+You'll need your ec2 private key and certificate that you can generate from your
+account page at AWS. Put them in your homedir and `chmod 400` them. You'll also
+need to generate a keypair for logging into your instance with SSH. The easiest
+way to generate the keypair is with the AWS management console. It will give you
+the private key for download and install the public key on your instances that
+use this keypair (we'll get to that later). In the example below
+`ssh.pem` is the private part of the keypair generated with the
+management console.
 
-<pre class="brush: bash;">
+{% highlight bash %}
 export EC2_PRIVATE_KEY=~/.ec2/pk-xxxxxx.pem
 export EC2_CERT=~/.ec2/cert-xxxxxx.pem
 export EC2_SSH_KEY=~/.ec2/ssh.pem
-</pre>
+{% endhighlight %}
 
 Finally, we'll set the region, availability zone, machine image (AMI) and EBS
 volume that we will want to attach. Again, go to the management console or use
 the command line utilities to generate an EBS volume. The EBS volume will store
-the backup. The AMI listed is a Debian lenny base install from <a
-		href="http://alestic.com">http://alestic.com</a>.
+the backup. The AMI listed is a Debian Lenny base install from <a
+href="https://alestic.com">Alestic</a>.
 
-<pre class="brush: bash;">
+{% highlight bash %}
 export REGION=eu-west-1
 export ZONE=eu-west-1b
 export AMI=ami-8398b3f7
 export KEY_PAIR=ssh
 export BACKUP_VOLUME=vol-xxxxxxxx
-</pre>
+{% endhighlight %}
 
-Step 2: start instance and get ip address
------------------------------------------
+## Step 2: start instance and get ip address
 
 Now that we have set all our environment variables, the next steps are easy! We
-start 1 instance, with security group <code>ssh</code> and ask Amazon to
-install the keypair we created before in the ssh <code>authorized_keys</code>
-file so we can connect later on. The <code>-g ssh</code> corresponds to the
+start 1 instance, with security group `ssh` and ask Amazon to
+install the keypair we created before in the ssh `authorized_keys`
+file so we can connect later on. The `-g ssh` corresponds to the
 security group and defines the firewall for the instance. You'll have to go
 into the management console and add a security group that allows ssh access
 from your home public ip address or wherever you are backup up from.
@@ -95,16 +93,23 @@ from your home public ip address or wherever you are backup up from.
 After giving the start command, we monitor the instance, waiting until it is up
 and running so we can determine its public ip address.
 
-<pre class="brush: bash;">
-INSTANCE_ID=`ec2-run-instances --region $REGION $AMI -n 1 -g ssh -k $KEY_PAIR --availability-zone $ZONE | grep INSTANCE | cut -f2`
-while [ "$INSTANCE_RUNNING" != "running" ]; do
-	INSTANCE_RUNNING=`ec2-describe-instances --region $REGION $INSTANCE_ID | grep INSTANCE | cut -f6`
-done
-PUBLIC_IP=`ec2-describe-instances --region $REGION $INSTANCE_ID | grep INSTANCE | cut -f17`
-</pre>
+{% highlight bash %}
+INSTANCE_ID=$(
+    ec2-run-instances --region $REGION $AMI
+    -n 1 -g ssh -k $KEY_PAIR --availability-zone $ZONE
+    | grep INSTANCE | cut -f2)
 
-Step 3: attach and mount backup volume
---------------------------------------
+while [ "$INSTANCE_RUNNING" != "running" ]; do
+    INSTANCE_RUNNING=$(
+        ec2-describe-instances--region $REGION $INSTANCE_ID
+        | grep INSTANCE | cut -f6)
+done
+PUBLIC_IP=$(
+    ec2-describe-instances --region $REGION $INSTANCE_ID
+    | grep INSTANCE | cut -f17)
+{% endhighlight %}
+
+## Step 3: attach and mount backup volume
 
 Now that the instance is running and we know its ip, we should be able to
 connect to it. Unfortunately, sometimes the SSH server is not running yet if
@@ -115,64 +120,68 @@ it a name (sdf in this case).
 You'll have to manually do all of this once, so you can create a partition and
 a filesystem on the newly attached 'sdf' virtual harddisk.
 
-<pre class="brush: bash;">
-ec2-attach-volume --region $REGION $BACKUP_VOLUME -i $INSTANCE_ID -d sdf
+{% highlight bash %}
+ec2-attach-volume --region $REGION $BACKUP_VOLUME \
+    -i $INSTANCE_ID -d sdf
 sleep 60 # give it a while to start the ssh server
-ssh -i $EC2_SSH_KEY root@$PUBLIC_IP "mkdir /backup &amp;&amp; mount /dev/sdf1 /backup"
-</pre>
+ssh -i $EC2_SSH_KEY root@$PUBLIC_IP \
+    "mkdir /backup && mount /dev/sdf1 /backup"
+{% endhighlight %}
 
-Step 4: run rsync
------------------
+## Step 4: run rsync
 
 With the backup volume mounted, we now proceed to run rsync. The only
 non-standard option here is --rsh, because we have to tell it to use the
 private key that we created earlier to authenticate to the instance.
 
-*Be careful with the --delete option!*
+_Be careful with the --delete option!_
 
-<pre class="brush: bash;">
-rsync -avhz --progress --delete --force --bwlimit=50 --rsh "ssh -i $EC2_SSH_KEY" /path/you/want/to/backup root@$PUBLIC_IP:/backup/some_nice_name
-</pre>
+{% highlight bash %}
+rsync -avhz --progress --delete --force --bwlimit=50 \
+    --rsh "ssh -i $EC2_SSH_KEY" \
+    /path/you/want/to/backup \
+    root@$PUBLIC_IP:/backup/some_nice_name
+{% endhighlight %}
 
-Step 5: unmount and detach backup volume
-----------------------------------------
+## Step 5: unmount and detach backup volume
 
-<pre class="brush: bash;">
-ssh -i $EC2_SSH_KEY root@$PUBLIC_IP "sync &amp;&amp; df -h /dev/sdf1 &amp;&amp; umount /backup"
+{% highlight bash %}
+ssh -i $EC2_SSH_KEY root@$PUBLIC_IP \
+    "sync && df -h /dev/sdf1 && umount /backup"
 sleep 5 # probably not necessary, just to be sure
 ec2-detach-volume --region $REGION $BACKUP_VOLUME
-</pre>
+{% endhighlight %}
 
-Step 6: terminate instance
---------------------------
+## Step 6: terminate instance
 
 Easy:
 
-<pre class="brush: bash;">
-ec2-terminate-instances --region $REGION $INSTANCE_ID</pre>
+{% highlight bash %}
+ec2-terminate-instances --region $REGION $INSTANCE_ID
+{% endhighlight %}
 
-Step 7: cleanup
----------------
+## Step 7: cleanup
 
-SSH will add an entry to your <code>known_hosts</code> file for the instance.
+SSH will add an entry to your `known_hosts` file for the instance.
 But because the instance is very short-lived, there is no point in keeping
 these entries. If we don't prune them, they will add up and pollute your
-<code>known_hosts</code> file. Luckily there is an easy fix:
+`known_hosts` file. Luckily there is an easy fix:
 
-<pre class="brush: bash;">ssh-keygen -R $PUBLIC_IP</pre>
+{% highlight bash %}
+ssh-keygen -R $PUBLIC_IP
+{% endhighlight %}
 
 This will remove the entries corresponding to the instance from the file and
 make sure it stays nice and clean.
 
-Step 8: troubleshooting
------------------------
+## Step 8: troubleshooting
 
-*Help! I'm getting host key errors from SSH!* SSH wants you to confirm
+_Help! I'm getting host key errors from SSH!_ SSH wants you to confirm
 on connect that the key fingerprint of the server matches your expectations.
 You can (should) read the fingerprint from the console log of the instance
 (using ec2-get-console-output) but I haven't tried to make the script check the
 fingerprint. Instead, you can let ssh ignore host verification 'errors' by
-adding <code>StrictHostKeyChecking no</code> to <code>~/.ssh/config</code>. I
+adding `StrictHostKeyChecking no` to `/.ssh/config`. I
 know it's not ideal, but by setting firewall rules to only allow traffic from
 your home ip and using ip addresses instead of dns names, I believe it is quite
 hard for someone to perform a Man-in-the-Middle attack without you finding out
@@ -181,8 +190,7 @@ really quickly.
 That's it! Stuff it in a weekly cron job, sit back and feel good about
 yourself!
 
-Statistics
-----------
+## Statistics
 
 So how safe is our data, assuming a weekly EC2 backup schedule? The chance of
 data loss equals the chance that our raid setup fails while our amazon backup
