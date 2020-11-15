@@ -1,24 +1,20 @@
-body,
-nav li {
-  font-family: 'Open Sans', sans-serif;
+html {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 18px;
+  line-height: 1.5rem;
 }
 
 body {
-  font-size: .88em;
-  font-weight: 300;
+  /* font-weight: 300; */
   margin-left: auto;
   margin-right: auto;
   margin-top: 50px;
   width: 800px;
 }
 
-p,
-li {
-  text-align: justify;
-}
-
 h1#top {
-  font-size: 3em;
+  font-family: "Open Sans", sans-serif;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: -0.05em;
   text-align: center;
@@ -42,6 +38,7 @@ nav ul {
 
 nav li {
   display: inline;
+  font-family: "Open Sans", sans-serif;
   font-weight: 600;
   line-height: 2em;
   margin: 0 0.5em;
@@ -57,17 +54,12 @@ hr {
   background: #67bf3b;
   border: none;
   color: #67bf3b;
-  height: 5px;
+  height: 2px;
   margin: 20px 0;
 }
 
 a {
   color: black;
-}
-
-#posts li a,
-article a {
-  padding: 2px 4px;
 }
 
 #posts a:hover,
@@ -80,25 +72,56 @@ article a:focus {
   text-decoration: none;
 }
 
-a.blue:hover,   a.blue:active,   a.blue:focus   { background: #08f; color: #fff }
-a.purple:hover, a.purple:active, a.purple:focus { background: #84b; color: #fff }
-a.red:hover,    a.red:active,    a.red:focus    { background: #f44; color: #fff }
-a.pink:hover,   a.pink:active,   a.pink:focus   { background: #f48; color: #fff }
-a.orange:hover, a.orange:active, a.orange:focus { background: #f90; color: #fff }
-a.green:hover,  a.green:active,  a.green:focus  { background: #67bf3b; color: #fff }
-
-.date {
-  color: gray;
-  font-family: "Courier New";
-  font-size: 80%;
+a.blue:hover,
+a.blue:active,
+a.blue:focus {
+  background: #08f;
+  color: #fff;
+}
+a.purple:hover,
+a.purple:active,
+a.purple:focus {
+  background: #84b;
+  color: #fff;
+}
+a.red:hover,
+a.red:active,
+a.red:focus {
+  background: #f44;
+  color: #fff;
+}
+a.pink:hover,
+a.pink:active,
+a.pink:focus {
+  background: #f48;
+  color: #fff;
+}
+a.orange:hover,
+a.orange:active,
+a.orange:focus {
+  background: #f90;
+  color: #fff;
+}
+a.green:hover,
+a.green:active,
+a.green:focus {
+  background: #67bf3b;
+  color: #fff;
 }
 
-article .date {
-  font-size: 60%;
+time {
+  color: gray;
+  white-space: nowrap;
 }
 
 ul#posts {
   list-style: none;
+  padding: 0;
+}
+
+#posts header {
+  display: flex;
+  justify-content: space-between;
 }
 
 #posts li {
@@ -106,7 +129,8 @@ ul#posts {
 }
 
 article h1 {
-  font-size: 150%;
+  font-family: "Open Sans", sans-serif;
+  /* font-size: 150%; */
   font-weight: 600;
 }
 
@@ -114,6 +138,11 @@ article {
   margin: 0 10px;
 }
 
-.syntaxhighlighter {
-  padding: 5px;
+figure pre {
+  padding: 1rem 2rem;
+}
+
+.previous-and-next {
+  display: flex;
+  justify-content: space-between;
 }
