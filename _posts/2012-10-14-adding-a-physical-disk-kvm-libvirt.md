@@ -1,10 +1,7 @@
 ---
-layout: default
 title: Adding a Physical Disk to a Guest with Libvirt / KVM
+layout: post
 ---
-
-{{ page.title }}
-================
 
 It can't be done with virt-manager. That one took me a while to figure
 out. As far as I can tell, virt-manager works with storage pools. You
