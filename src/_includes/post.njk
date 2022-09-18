@@ -19,6 +19,7 @@ layout: default
 
 <h2>Comments</h2>
 <form name="comment" method="POST" data-netlify="true">
+  <input type="hidden" name="url" value="https://ronaldevers.nl{{ page.url }}">
   <p>
     <label>Your Name: <input type="text" name="name" required></label>
   </p>
