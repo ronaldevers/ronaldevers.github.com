@@ -1,5 +1,5 @@
 ---
-title: Automaticaly compile tex files on save in vim
+title: Automatically compile tex files on save in vim
 layout: post
 ---
 
