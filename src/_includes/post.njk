@@ -17,22 +17,30 @@ layout: default
 
 <hr>
 
-<h2>Comments</h2>
-<form name="comment" method="POST" data-netlify="true">
-  <input type="hidden" name="url" value="https://ronaldevers.nl{{ page.url }}">
-  <p>
-    <label>Your Name: <input type="text" name="name" required></label>
-  </p>
-  <p>
-    <label>Your Email (will not be published): <input type="email" name="email" required></label>
-  </p>
-  <p>
-    <label>
-      Comment:<br>
-      <textarea rows="10" cols="80" name="comment" required></textarea>
-    </label>
-  </p>
-  <p>
-    <button type="submit">Send</button>
-  </p>
-</form>
+<section id="comments">
+  <h2>Comments</h2>
+  <form name="comment" method="POST" data-netlify="true">
+    <input type="hidden" name="url" value="https://ronaldevers.nl{{ page.url }}">
+    <p>
+      <label>
+        Your name:<br>
+        <input type="text" name="name" required>
+      </label>
+    </p>
+    <p>
+      <label>Your email (will not be published): <input type="email" name="email" required></label>
+    </p>
+    <p>
+      <label>
+        Comment:<br>
+        <textarea style="max-width: 100%;" rows="10" cols="80" name="comment" required></textarea>
+      </label>
+    </p>
+    <p>
+      <button type="submit">Send</button>
+    </p>
+    <p>
+      <small>I manually review comments so it may take a while for your comment to get published.</small>
+    </p>
+  </form>
+</section>
