@@ -4,8 +4,11 @@
   <meta charset="utf-8">
   <title>{{ title | ronaldify }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link type="text/css" rel="stylesheet" href="/screen.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  {% set css %}
+    {% include "../screen.css" %}
+    {% include "../prism.css" %}
+  {% endset -%}
+  <style>{{ css | cssmin | safe }}</style>
 </head>
 
 <body>
