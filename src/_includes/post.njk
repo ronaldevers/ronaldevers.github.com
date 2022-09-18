@@ -5,7 +5,7 @@ layout: default
 <article>
   <header>
     <h1>
-      » {{ title }}
+      {{ title }}
       <br />
     </h1>
     {{ page.date | formatDate | safe}}
@@ -13,43 +13,25 @@ layout: default
 
   {{ content | safe }}
 
-  <footer>
-    <hr />
-    <div class="previous-and-next">
-      {% if page.previous.url %}
-      <a class="previous" href="{{ page.previous.url }}"
-        >« {{ page.previous.title }}</a
-      >
-      {% endif %} {% if page.next.url %}
-      <a class="next" href="{{ page.next.url }}">{{ page.next.title }} »</a>
-      {% endif %}
-    </div>
-
-    <hr />
-
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        const url = "http://ronaldevers.nl{{ page.url }}";
-        this.page.url = url;
-        this.page.identifier = url;
-      };
-      (function () {
-        // DON'T EDIT BELOW THIS LINE
-        var d = document,
-          s = d.createElement("script");
-        s.src = "https://ronaldevers-nl.disqus.com/embed.js";
-        s.setAttribute("data-timestamp", +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript
-      >Please enable JavaScript to view the
-      <a href="https://disqus.com/?ref_noscript"
-        >comments powered by Disqus.</a
-      ></noscript
-    >
-  </footer>
-
-  <hr />
 </article>
+
+<hr>
+
+<h2>Comments</h2>
+<form name="comment" method="POST" data-netlify="true">
+  <p>
+    <label>Your Name: <input type="text" name="name" required></label>
+  </p>
+  <p>
+    <label>Your Email (will not be published): <input type="email" name="email" required></label>
+  </p>
+  <p>
+    <label>
+      Comment:<br>
+      <textarea rows="10" cols="80" name="comment" required></textarea>
+    </label>
+  </p>
+  <p>
+    <button type="submit">Send</button>
+  </p>
+</form>
