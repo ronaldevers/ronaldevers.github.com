@@ -1,5 +1,6 @@
 ---
 title: IPhone and iPod syncing too often?
+permalink: /2010-07-23-iphone-and-ipod-syncing-too-often/
 ---
 
 Personally, I can't stand it that my iPhone starts syncing every time I plug it
@@ -15,9 +16,9 @@ Hints</a>.
 
 {% highlight applescript %}
 tell application "iTunes"
-repeat with s in sources
-if (kind of s is iPod) then update s
-end repeat
+    repeat with s in sources
+        if (kind of s is iPod) then update s
+    end repeat
 end tell
 {% endhighlight %}
 

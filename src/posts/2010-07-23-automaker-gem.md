@@ -1,5 +1,6 @@
 ---
 title: Automaker gem
+permalink: /2010-07-23-automaker-gem/
 ---
 
 After figuring out how you publish a gem, I have made (cut) my first one! In a

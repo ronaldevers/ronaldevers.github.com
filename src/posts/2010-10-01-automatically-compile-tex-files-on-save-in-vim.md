@@ -1,5 +1,6 @@
 ---
 title: Automatically compile tex files on save in vim
+permalink: /2010-10-01-automatically-compile-tex-files-on-save-in-vim/
 ---
 
 If you're using the Vim editor, like me, here is another option to

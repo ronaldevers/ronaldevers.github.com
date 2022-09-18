@@ -1,5 +1,6 @@
 ---
 title: Adding a Physical Disk to a Guest with Libvirt / KVM
+permalink: /2012-10-14-adding-a-physical-disk-kvm-libvirt/
 ---
 
 It can't be done with virt-manager. That one took me a while to figure
@@ -14,8 +15,7 @@ section:
 
 {% highlight xml %}
 <disk type='block' device='disk'>
-<driver name='qemu' type='raw' />
-
+  <driver name='qemu' type='raw' />
   <source dev='/dev/md/storage' />
   <target dev='vdb' bus='virtio' />
 </disk>
@@ -26,9 +26,7 @@ This will make the host's `/dev/md/storage` available in the guest as
 reload the config by hand. Log in to your host and issue this command:
 
 {% highlight bash %}
-
 # virsh define /etc/libvirt/qemu/jetsetetser.xml
-
 Domain jetser defined from /etc/libvirt/qemu/jetsetetser.xml
 {% endhighlight %}
 

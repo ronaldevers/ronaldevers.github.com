@@ -1,5 +1,6 @@
 ---
 title: Rsync backup to Amazon EC2/EBS
+permalink: /2010-07-26-rsync-backup-to-amazon-ec2-with-ebs/
 ---
 
 I'm going paranoid. That's why I've decided to host my email myself and not

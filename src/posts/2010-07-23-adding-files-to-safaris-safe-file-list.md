@@ -1,5 +1,6 @@
 ---
 title: Adding files to Safari's safe file list
+permalink: /2010-07-23-adding-files-to-safaris-safe-file-list/
 ---
 
 It is always nice to spare mouse clicks. For instance, when I download an nzb
