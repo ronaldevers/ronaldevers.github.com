@@ -1,6 +1,5 @@
 ---
 title: Rsync backup to Amazon EC2/EBS
-layout: post
 ---
 
 I'm going paranoid. That's why I've decided to host my email myself and not
@@ -95,18 +94,18 @@ and running so we can determine its public ip address.
 
 {% highlight bash %}
 INSTANCE_ID=$(
-    ec2-run-instances --region $REGION $AMI
-    -n 1 -g ssh -k $KEY_PAIR --availability-zone $ZONE
-    | grep INSTANCE | cut -f2)
+ec2-run-instances --region $REGION $AMI
+-n 1 -g ssh -k $KEY_PAIR --availability-zone $ZONE
+| grep INSTANCE | cut -f2)
 
 while [ "$INSTANCE_RUNNING" != "running" ]; do
-    INSTANCE_RUNNING=$(
+INSTANCE_RUNNING=$(
         ec2-describe-instances--region $REGION $INSTANCE_ID
         | grep INSTANCE | cut -f6)
 done
 PUBLIC_IP=$(
-    ec2-describe-instances --region $REGION $INSTANCE_ID
-    | grep INSTANCE | cut -f17)
+ec2-describe-instances --region $REGION $INSTANCE_ID
+| grep INSTANCE | cut -f17)
 {% endhighlight %}
 
 ## Step 3: attach and mount backup volume
@@ -125,7 +124,7 @@ ec2-attach-volume --region $REGION $BACKUP_VOLUME \
     -i $INSTANCE_ID -d sdf
 sleep 60 # give it a while to start the ssh server
 ssh -i $EC2_SSH_KEY root@$PUBLIC_IP \
-    "mkdir /backup && mount /dev/sdf1 /backup"
+ "mkdir /backup && mount /dev/sdf1 /backup"
 {% endhighlight %}
 
 ## Step 4: run rsync
@@ -138,7 +137,7 @@ _Be careful with the --delete option!_
 
 {% highlight bash %}
 rsync -avhz --progress --delete --force --bwlimit=50 \
-    --rsh "ssh -i $EC2_SSH_KEY" \
+ --rsh "ssh -i $EC2_SSH_KEY" \
     /path/you/want/to/backup \
     root@$PUBLIC_IP:/backup/some_nice_name
 {% endhighlight %}
@@ -147,7 +146,7 @@ rsync -avhz --progress --delete --force --bwlimit=50 \
 
 {% highlight bash %}
 ssh -i $EC2_SSH_KEY root@$PUBLIC_IP \
-    "sync && df -h /dev/sdf1 && umount /backup"
+ "sync && df -h /dev/sdf1 && umount /backup"
 sleep 5 # probably not necessary, just to be sure
 ec2-detach-volume --region $REGION $BACKUP_VOLUME
 {% endhighlight %}

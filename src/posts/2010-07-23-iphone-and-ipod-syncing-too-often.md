@@ -1,6 +1,5 @@
 ---
 title: IPhone and iPod syncing too often?
-layout: post
 ---
 
 Personally, I can't stand it that my iPhone starts syncing every time I plug it
@@ -16,13 +15,13 @@ Hints</a>.
 
 {% highlight applescript %}
 tell application "iTunes"
-  repeat with s in sources
-    if (kind of s is iPod) then update s
-  end repeat
+repeat with s in sources
+if (kind of s is iPod) then update s
+end repeat
 end tell
 {% endhighlight %}
 
-Works like a charm! It even starts iTunes if it is not running.  Export from
+Works like a charm! It even starts iTunes if it is not running. Export from
 AppleScript Editor as an application, put it in your Applications folder and in
 your dock.
 

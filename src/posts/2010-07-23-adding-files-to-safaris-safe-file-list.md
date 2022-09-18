@@ -1,6 +1,5 @@
 ---
 title: Adding files to Safari's safe file list
-layout: post
 ---
 
 It is always nice to spare mouse clicks. For instance, when I download an nzb
@@ -17,6 +16,7 @@ Create a file called `~/Library/Preferences/com.apple.DownloadAssessment.plist`
 With the following contents:
 
 {% highlight xml %}
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
     "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

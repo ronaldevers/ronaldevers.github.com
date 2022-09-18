@@ -1,0 +1,44 @@
+html {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 16px;
+  line-height: 1.5rem;
+}
+
+body {
+  margin: 2rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+}
+
+a {
+  color: #67bf3b;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+time {
+  white-space: nowrap;
+}
+
+.previous-and-next {
+  display: flex;
+  justify-content: space-between;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  font-size: 0.875rem !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333;
+    color: white;
+  }
+}

@@ -1,0 +1,39 @@
+---
+title: Ronald Evers
+layout: default
+---
+
+<h2>About me</h2>
+
+<p>
+  Hello 👋 ! I'm Ronald, I'm a father of two and a software engineer. I work
+  at <a href="https://www.startmail.com/en/about-us/">StartMail</a> where
+  I push for simple and secure private email solutions. I like cycling
+  and have been known to play squash pre-pandemic.
+</p>
+
+<p>
+  You can find me
+  on <a href="http://nl.linkedin.com/in/ronaldpaulusevers">linkedin</a>
+  or <a href="http://github.com/ronaldevers">github</a> or send me
+  an <a href="mailto:mail@ronaldevers.nl">email</a> directly.
+</p>
+
+<p>
+  Finally, I write infrequently on this site, mostly about techy
+  things that I run into.
+</p>
+
+<h2>Writings</h2>
+
+<ul>
+  {% for post in collections.posts | reverse %}
+  <li>
+    <header>
+      <a href="{{ post.url }}">{{ post.data.title }}</a>
+      {{ post.date | formatDate | safe}}
+    </header>
+    <p>{{ post.data.excerpt }}</p>
+  </li>
+  {% endfor %}
+</ul>

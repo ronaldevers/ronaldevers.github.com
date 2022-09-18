@@ -1,4 +1,0 @@
-all:
-	jekyll
-
-.PHONY: all

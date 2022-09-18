@@ -1,6 +1,5 @@
 ---
 title: Automaker gem
-layout: post
 ---
 
 After figuring out how you publish a gem, I have made (cut) my first one! In a
@@ -8,7 +7,7 @@ previous post I talk about using fsevents gem to monitor directory changes. I
 have now polished it up and bundled it as a gem and published it to gemcutter.
 You can now:
 
-{% highlight sh %}
+{% highlight bash %}
 sudo gem install fsevents automaker
 automaker /path/to/watch .tex
 {% endhighlight %}
