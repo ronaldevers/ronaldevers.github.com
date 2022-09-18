@@ -7,6 +7,10 @@ module.exports = function(eleventyConfig) {
     return `<time datetime="${dt.toISODate()}">${dt.toLocaleString(DateTime.DATE_MED)}</time>`;
   });
 
+  eleventyConfig.addFilter("ronaldify", function(text) {
+    return text.endsWith('Ronald Evers') ? text : `${text} | Ronald Evers`;
+  });
+
   return {
     dir: {
       input: 'src',
