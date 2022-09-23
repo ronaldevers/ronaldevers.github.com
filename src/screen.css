@@ -1,11 +1,16 @@
 html {
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 16px;
-  line-height: 1.5rem;
+  line-height: 1.75em;
 }
 
 body {
-  margin: 2rem;
+  margin: 1em;
+}
+
+#wrapper {
+  margin: 0 auto;
+  max-width: 40em;
 }
 
 h1 {
