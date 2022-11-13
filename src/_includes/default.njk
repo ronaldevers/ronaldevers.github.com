@@ -16,6 +16,13 @@
 <h1><a href="/" title="Back to start">Ronald Evers</a></h1>
 {{ content | safe }}
 <script>{% include "../microanalytics.js" %}</script>
+<script>
+document.querySelectorAll('pre[class*="language-"]').forEach((element) => {
+  element.addEventListener("click", event => {
+    navigator.clipboard.writeText(event.target.innerText);
+  });
+});
+</script>
 </div>
 </body>
 </html>
