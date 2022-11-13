@@ -1,0 +1,18 @@
+---
+title: Drafts - Ronald Evers
+layout: default
+---
+
+<h2>Drafts</h2>
+
+<ul>
+  {% for draft in collections.drafts | reverse %}
+  <li>
+    <header>
+      <a href="{{ draft.url }}">{{ draft.data.title }}</a>
+      {{ draft.date | formatDate | safe}}
+    </header>
+    <p>{{ draft.data.excerpt }}</p>
+  </li>
+  {% endfor %}
+</ul>
