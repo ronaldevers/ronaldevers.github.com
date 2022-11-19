@@ -1,26 +1,28 @@
 ---
-title: KPN FTTH with OpenBSD as a router and firewall
+title: KPN FTTH with OpenBSD
 permalink: /openbsd-kpn/
-draft: true
 ---
 
-This article is part of a series on using OpenBSD to replace your ISP's router.
-I'm replacing a KPN / XS4ALL Fritzbox (or Experia box) on a fiber-to-the-home
-connection.
+_If you have an XGSPON fiber-to-the-home ("glasvezel") connection from KPN or XS4ALL (Dutch ISPs), then you probably have an RJ45 connection in your "meterkast".
+Ever wondered what's on there?
+I certainly have!_
+
+I'm replacing the Fritzbox my provider supplied (or Experia box, KPN box) with an OpenBSD box.
+This will let me satisfy my curiosity and maybe the nanny as well.
+It turns out that the Pihole DNS server on my LAN is not reachable from the guest WiFi.
+This makes sense, but not having DNS made the nanny unhappy.
+
+Another reason I'm doing this is that I'm curious about OpenBSD.
+I've been looking for a good excuse to play with it and for me this is it.
+At work we're using FreeBSD and I am curious about the differences and mostly about PF on OpenBSD vs FreeBSD.
+
+So this will be a small series of articles on KPN + OpenBSD.
+In this one we'll focus on getting internet connectivity on the router and setting up a basic firewall.
+In the next articles we'll add internet access for LAN clients, IPTV and a caching DNS server:
 
 1. Basic internet connectivity
-1. Serving the local network
+1. [Serving the local network](/openbsd-router/)
 1. Adding IPTV
-1. Adding a DNS server
-
-Why might you do this? In my specific case I want more control over the local
-network. With the Fritzbox I was not able to send a different DNS server to
-clients on the LAN vs clients on the Guest WiFi. But honestly, I'm doing it just
-because I can, and to satisfy my curiosity.
-
-This article starts with minimal steps to configure a firewall & router for KPN
-or XS4ALL, on a fiber-to-the-home connection. Then we add DHCP and routing for
-the local network, then IPTV and then a local caching DNS server.
 
 ## 🌐 Configuring network interfaces
 
@@ -35,16 +37,27 @@ not start later. Note that we don't need IP addresses on these interfaces.
 
 ```sh
 echo 'description "KPN FTTH (wan)" up' > /etc/hostname.em0
-echo 'parent em0 vnetid 6 description "KPN vlan6 (internet)" up' \
-  > /etc/hostname.vlan6
+cat > /etc/hostname.vlan6 <<EOF
+parent em0 vnetid 6
+description "KPN vlan6 (internet)"
+mtu 1508
+up
+EOF
 sh /etc/netstart
 ```
 
-Next up is a [pppoe(4)](https://man.openbsd.org/pppoe.4) connection on `vlan6`.
+Note the `vlan6` interface has an increased MTU at 1508 bytes. KPN can do a 1500
+MTU in the PPPOE and a PPPOE header is 8 bytes. So to do 1500 "inside" the
+PPPOE, we need 1508 "outside". Without the larger MTU on the VLAN interface the
+PPPOE MTU would sit at 1492. If hosts on your LAN are using 1500 (which they
+typically would) then that mismatch could lead to lots of fragmented packets.
+
+So next up is the PPPOE connection on `vlan6`.
 
 ```sh
 cat > hostname.pppoe0 <<EOF
 inet 0.0.0.0 255.255.255.255 NONE \\
+  mtu 1500 \\
   pppoedev vlan6 authproto pap \\
   authname internet authkey internet \\
   description "KPN PPPOE internet" \\
@@ -70,16 +83,16 @@ em0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
 	description: KPN FTTH (wan)
 	media: Ethernet autoselect (1000baseT full-duplex)
 	status: active
-pppoe0: flags=8851<UP,POINTOPOINT,RUNNING,SIMPLEX,MULTICAST> mtu 1492
+pppoe0: flags=8851<UP,POINTOPOINT,RUNNING,SIMPLEX,MULTICAST> mtu 1500
 	description: KPN PPPOE internet
 	dev: vlan6 state: session
-	sid: 0x.... PADI retries: 0 PADR retries: 0 time: 00:10:18
+	sid: 0x1234 PADI retries: 0 PADR retries: 0 time: 00:10:18
 	sppp: phase network authproto pap
 	dns: 195.121.97.202 195.121.97.203
 	groups: pppoe egress
 	status: active
 	inet $YOUR_PUBLIC_IP --> $KPN_PPPOE_CONCENTRATOR netmask 0xffffffff
-vlan6: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+vlan6: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1508
 	description: KPN vlan6 (internet)
 	encap: vnetid 6 parent em0 txprio packet rxprio outer
 	media: Ethernet autoselect (1000baseT full-duplex)
@@ -131,7 +144,6 @@ table <martians> { \\
 
 set skip on lo0
 
-match in all scrub (no-df random-id max-mss 1440)
 match out on \$wan inet from ! (\$wan:network) nat-to (\$wan)
 
 block return log
@@ -143,8 +155,6 @@ pass in inet proto tcp to (self) port 22
 EOF
 ```
 
-- `match in all scrub (no-df random-id max-mss 1440)`: a bit of cargo-culting,
-  not sure if you should use these or not
 - `match out on $wan inet from ! ($wan:network) nat-to ($wan)`: fix source
   address on outgoing packets on WAN (masquerading)
 - `block return log`: reject everything by default
@@ -167,12 +177,3 @@ pfctl -e
 
 Note, PF will happily load rules for interfaces that do not exist. So make sure
 your interface names are correct!
-
-## 🤷‍♂️ Open questions
-
-- I don't really know if we need the `match in all scrub` rule. Or if it is even
-  nice-to-have. Haven't experimented with this much due to not getting a
-  time-slot from the family!
-- Can the MTUs be increased? Now we've got 1500 on em0 and 1492 on pppoe0. I
-  think we can do 1500 on pppoe0.
-- How does the `max-mss 1440` relate to the interface MTUs?
