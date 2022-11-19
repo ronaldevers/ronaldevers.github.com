@@ -28,7 +28,24 @@ layout: default
       <a href="{{ post.url }}">{{ post.data.title }}</a>
       {{ post.date | formatDate | safe}}
     </header>
-    <p>{{ post.data.excerpt }}</p>
+  </li>
+  {% endfor %}
+</ul>
+
+<h2>Old</h2>
+
+<p>
+  Some really old posts that are not relevant anymore and that I'm maybe even a
+  little bit ashamed of but left on here for giggles anyway...
+</p>
+
+<ul>
+  {% for post in collections.oldposts | reverse %}
+  <li>
+    <header>
+      <a href="{{ post.url }}">{{ post.data.title }}</a>
+      {{ post.date | formatDate | safe}}
+    </header>
   </li>
   {% endfor %}
 </ul>
